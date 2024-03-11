@@ -8,7 +8,8 @@ const notifyMessage = require("./notifyMessage");
 
 dotenv.config({ path: ".env" });
 
-const { TOKEN, ROLE_LIMIT, GUILD_ID, NOTIFY_CHANNEL_ID, ROLE_ID } = process.env;
+const { TOKEN, ROLE_LIMIT, GUILD_ID, NOTIFY_CHANNEL_ID, ROLE_IDS } =
+	process.env;
 
 const client = new Client({
 	intents: [
@@ -35,11 +36,11 @@ client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 			(role) => !oldMember.roles.cache.has(role),
 		);
 
-		if (addedRole.id !== ROLE_ID) return;
+		if (!ROLE_IDS.split(",").includes(addedRole.id)) return;
 
 		if (addedRole.members.size <= ROLE_LIMIT) return;
 
-		await newMember.roles.remove(ROLE_ID);
+		await newMember.roles.remove(addedRole);
 
 		const notifyChannel = await newMember.guild.channels.fetch(
 			NOTIFY_CHANNEL_ID,
