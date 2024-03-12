@@ -33,7 +33,7 @@ client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 		if (oldMember.roles.cache.size >= newMember.roles.cache.size) return;
 
 		const addedRole = newMember.roles.cache.find(
-			(role) => !oldMember.roles.cache.has(role),
+			(role) => !oldMember.roles.cache.has(role.id),
 		);
 
 		if (!ROLE_IDS.split(",").includes(addedRole.id)) return;
