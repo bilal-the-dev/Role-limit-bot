@@ -30,15 +30,24 @@ client.once(Events.ClientReady, async (readyClient) => {
 
 client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 	try {
+		console.log("listening to event");
 		if (oldMember.roles.cache.size >= newMember.roles.cache.size) return;
+		console.log("Role was added");
 
 		const addedRole = newMember.roles.cache.find(
 			(role) => !oldMember.roles.cache.has(role),
 		);
 
+		console.log(ROLE_IDS.split(","));
+		console.log(addedRole.id);
+		console.log(ROLE_IDS.split(",").includes(addedRole.id));
 		if (!ROLE_IDS.split(",").includes(addedRole.id)) return;
 
+		console.log("Target role found");
+
 		if (addedRole.members.size <= ROLE_LIMIT) return;
+
+		console.log("Limit hit");
 
 		await newMember.roles.remove(addedRole);
 
